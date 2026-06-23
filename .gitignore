@@ -1,0 +1,6 @@
+.env
+*.log
+vw-data/
+caddy-data/
+caddy-config/
+.omo/

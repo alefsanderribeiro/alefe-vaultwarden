@@ -1,0 +1,4 @@
+servidor-ubuntu-home.tail2f0857.ts.net {
+    reverse_proxy vaultwarden:80
+    tls internal
+}
