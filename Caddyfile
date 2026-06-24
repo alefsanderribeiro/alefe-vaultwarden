@@ -1,3 +1,6 @@
-http://servidor-ubuntu-home.tail2f0857.ts.net {
+vault.alefsander.dev {
     reverse_proxy vaultwarden:80
+    tls {
+        dns cloudflare {env.CF_API_TOKEN}
+    }
 }

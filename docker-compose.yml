@@ -14,9 +14,10 @@ services:
         max-file: "3"
 
   caddy:
-    image: caddy:2-alpine
+    build: ./caddy-dockerfile
     ports:
       - "127.0.0.1:8080:80"
+      - "127.0.0.1:443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./caddy-data:/data
@@ -26,6 +27,8 @@ services:
     restart: unless-stopped
     depends_on:
       - vaultwarden
+    environment:
+      CF_API_TOKEN: ${CF_API_TOKEN}
 
 networks:
   tailscale-net:
