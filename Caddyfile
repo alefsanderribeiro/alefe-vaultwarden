@@ -49,7 +49,12 @@ finance.alefsander.dev {
 }
 
 pihole.alefsander.dev {
-    reverse_proxy pihole:80
+    handle / {
+        redir * /admin/ permanent
+    }
+    handle {
+        reverse_proxy pihole:80
+    }
     tls {
         dns cloudflare {env.CF_API_TOKEN}
     }
