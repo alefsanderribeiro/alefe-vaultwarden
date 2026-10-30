@@ -9,7 +9,7 @@ services:
     volumes:
       - ./vw-data:/data/
     networks:
-      - tailscale-net
+      - edge
     restart: unless-stopped
     logging:
       driver: json-file
@@ -17,24 +17,19 @@ services:
         max-size: 10m
         max-file: "3"
 
-  caddy:
-    container_name: caddy-proxy-tailscale
-    build: ./caddy-dockerfile
-    ports:
-      - "127.0.0.1:8080:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./caddy-data:/data
-      - ./caddy-config:/config
-    networks:
-      - tailscale-net
-    restart: unless-stopped
-    depends_on:
-      - vaultwarden
-    environment:
-      CF_API_TOKEN: ${CF_API_TOKEN}
+# O Caddy NÃO mora mais aqui. Foi promovido a projeto de infraestrutura
+# próprio em ~/caddy, para deixar de ser um ponto único de falha acoplado
+# a este serviço (recriar o Vaultwarden derrubava a borda inteira).
+#
+# O Caddyfile, o build e os certificados vivem lá. Este projeto cuida
+# apenas do Vaultwarden.
 
 networks:
-  tailscale-net:
-    driver: bridge
+  # Rede de borda criada uma vez por host, FORA de qualquer compose:
+  #   docker network create edge
+  # Por ser externa, nenhum `docker compose down` consegue removê-la —
+  # antes, esta rede pertencia a este projeto e um `down` aqui deixava
+  # 6 outros projetos sem rede.
+  edge:
+    external: true
+    name: edge
